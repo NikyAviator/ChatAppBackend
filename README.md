@@ -15,3 +15,4 @@ Spring Web,
 Lombok,
 Spring Data JPA,
 PostgreSQL Driver.
+Spring Security
