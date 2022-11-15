@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import ppc.chatappbackend.data.Message;
+import ppc.chatappbackend.dtos.MessageDTO;
 import ppc.chatappbackend.services.MessageService;
 
 @RestController
@@ -21,10 +21,12 @@ public class MessageController {
     }
 
     @PostMapping("/send")
-    public ResponseEntity<Message> sendMessage(@RequestHeader String username, @RequestBody SendMessage sendMessage){
+    public ResponseEntity<MessageDTO> sendMessage(@RequestHeader String username, @RequestBody SendMessage sendMessage){
         var message = messageService.sendMessage(username, sendMessage.getContent());
 
-        return ResponseEntity.ok(message);
+        // Här väljer man vad man skall skicka in för delar i message
+        var dto = new MessageDTO(message.getMessageId(),message.getContent(),message.getDate(),message.getUser().getName());
+        return ResponseEntity.ok(dto);
     }
     @Getter
     @Setter
