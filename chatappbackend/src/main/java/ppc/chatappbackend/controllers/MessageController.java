@@ -4,12 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ppc.chatappbackend.dtos.MessageDTO;
 import ppc.chatappbackend.services.MessageService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class MessageController {
@@ -28,9 +28,19 @@ public class MessageController {
         var dto = new MessageDTO(message.getMessageId(),message.getContent(),message.getDate(),message.getUser().getName());
         return ResponseEntity.ok(dto);
     }
+
     @Getter
     @Setter
     public static class SendMessage{
         private String content;
+    }
+
+    @GetMapping("/messages/{id}")
+    public ResponseEntity<List<MessageDTO>> getMessage(@PathVariable int id){
+        return ResponseEntity.ok(messageService
+                .getMessages(id)
+                .stream()
+                .map(message -> {return new MessageDTO(message.getMessageId(),message.getContent(),message.getDate(),message.getUser().getName());
+    }).collect(Collectors.toList()));
     }
 }
