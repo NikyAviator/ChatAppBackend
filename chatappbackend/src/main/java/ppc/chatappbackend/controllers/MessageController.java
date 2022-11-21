@@ -32,8 +32,8 @@ public class MessageController {
         var user =  userService.verifyToken(token);
         if (user == null)
             return ResponseEntity.notFound().build();
-        // TODO String.valueOf(user) vara bara user innan! what gives?
-        var message = messageService.sendMessage(String.valueOf(user), sendMessage.getContent());
+
+        var message = messageService.sendMessage(user, sendMessage.getContent());
 
         var dto = new MessageDTO(
                 message.getMessageId(),
